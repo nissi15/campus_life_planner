@@ -104,7 +104,7 @@
                     <div>
                         <h2>Recent tasks</h2>
                     </div>
-                    <button class="button primary" type="button" data-open-form><span aria-hidden="true">＋</span> Add task</button>
+                    <button class="btn primary" type="button" data-open-form><span aria-hidden="true">＋</span> Add task</button>
                 </div>
                 <div class="recent-head" aria-hidden="true">
                     <span>Title</span>
@@ -136,6 +136,72 @@
             </article>
         </section>
 
+        <section class="page" id="task-page" aria-labelledby="task-title" hidden>
+            <div class="page-header">
+                <h1 id="task-title">Tasks</h1>
+                <button class="btn primary" type="button" data-open-from>+ Add task</button>
+            </div>
+
+            <div class="card toolbar">
+                <div class="field search-area">
+                    <label for="search-input">Search here</label>
+                    <input type="text" id="search-input" placeholder="Eg: Study or club">
+                    <p id="search-input" class="error-msg" role="alert"></p>
+                </div>
+                <div class="field sort-area">
+                    <label for="sort-opt">Sort By</label>
+                    <select id="sort-opt">
+                        <option value="duedate">Due date</option>
+                        <option value="title">Title</option>
+                        <option value="duration">Duration</option>
+                    </select>
+                </div>
+                <button class="btn secondary" id="sort-direction" type="button">Oldest first</button>
+            </div>
+
+            <p class="result-count" id="task-nbr">0 tasks</p>
+            <div class="task-table">
+                <table>
+                    <caption class="screen-reader-only">Campus task records</caption>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Tag</th>
+                            <th>Due date</th>
+                            <th>Duration</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="task-table-body">
+                        <tr>
+                            <td>Frontend summative</td>
+                            <td><span class="tag">Study</span></td>
+                            <td>2026-09-14</td>
+                            <td>1.5 hours</td>
+                            <td>
+                            <button type="button">Edit</button>
+                            <button type="button">Delete</button>
+                            </td>
+                        </tr>
+                     
+                        <tr>
+                            <td>Attend RE class</td>
+                            <td><span class="tag">Club</span></td>
+                            <td>2026-10-16</td>
+                            <td>2 hours</td>
+                            <td>
+                            <button type="button">Edit</button>
+                            <button type="button">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="task-cards" id="task-cards"></div>
+            <p id="empty-state" class="empty-state" hidden>No tasks match your search</p>
+        </section>
+        
         
     </main>
 </body>
