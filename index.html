@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edu Planner</title>
+    <link rel="stylesheet" href="styles/style.css">
 </head>
 <body> 
      <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -42,9 +43,9 @@
     </div>
 
     <main id="main-content" tabindex="-1">
-        <section class="page active" id="dashboard_page" aria-labelledby="dashboard-title">
+        <section class="page active" id="dashboard-page" aria-labelledby="dashboard-title">
             <div class="page-header">
-                <h1 id="dashboard_title">Plan your day</h1>
+                <h1 id="dashboard-title">Plan your day</h1>
             </div>
 
             <div class="dash-stats" aria-label="task statistics">
@@ -69,7 +70,7 @@
                         <img src="icons/top_task.svg" alt="">
                     </span>
                     <div>
-                        <p>Top task</p><strong id="top-task">Npne</strong>
+                        <p>Top task</p><strong id="top-task">None</strong>
                     </div>
                 </article>
             </div>
@@ -81,7 +82,15 @@
                     </div>
                     <p id="today-date" class="today-date"></p>
                 </div>
-                <div id="today-tasks" class="today-list"></div>
+                <div id="today-tasks" class="today-list">
+
+ <!-- added a sample to style     the today's plan card              -->
+                    <div class="today-task">
+                        <strong>Attend frontend class</strong>
+                        <span class="tag">Study</span>
+                        <span>1.5 hours</span>
+                    </div>
+                </div>
             </article>
 
             <article class="card chart-card" >
@@ -92,7 +101,17 @@
                     </div>
                     <strong class="screen-reader-only" id="total-weekly">0 hours</strong>
                 </div>
-                <div class="week-chart" id="week-chart"aria-label="Past 7 day tasks chart" role="group"></div>
+                <div class="week-chart" id="week-chart" aria-label="Past 7 day tasks chart" role="group">
+
+<!--  added days of the week for the stat dashboard                  -->
+                    <div class="day-column"><span class="day-bar short-bar"></span><span>Sun</span></div>
+                    <div class="day-column"><span class="day-bar medium-bar"></span><span>Mon</span></div>
+                    <div class="day-column"><span class="day-bar tall-bar current-day"></span><span>Tue</span></div>
+                    <div class="day-column"><span class="day-bar medium-bar"></span><span>Wed</span></div>
+                    <div class="day-column"><span class="day-bar short-bar"></span><span>Thu</span></div>
+                    <div class="day-column"><span class="day-bar tall-bar"></span><span>Fri</span></div>
+                    <div class="day-column"><span class="day-bar empty-bar"></span><span>Sat</span></div>
+                </div>
                 <div class="target">
                     <p id="target_text">Weekly target => 0 of 20 hours</p>
                     <progress class="week-progress" id="week-progress" aria-label="weekly progress target" max="100" value="0">0%</progress>
@@ -136,22 +155,24 @@
             </article>
         </section>
 
+                                        <!-- task feature -->
+
         <section class="page" id="task-page" aria-labelledby="task-title" hidden>
             <div class="page-header">
                 <h1 id="task-title">Tasks</h1>
-                <button class="btn primary" type="button" data-open-from>+ Add task</button>
+                <button class="btn primary" type="button" data-open-form>+ Add task</button>
             </div>
 
             <div class="card toolbar">
                 <div class="field search-area">
                     <label for="search-input">Search here</label>
                     <input type="text" id="search-input" placeholder="Eg: Study or club">
-                    <p id="search-input" class="error-msg" role="alert"></p>
+                    <p id="search-error" class="error-msg" role="alert"></p>
                 </div>
                 <div class="field sort-area">
                     <label for="sort-opt">Sort By</label>
                     <select id="sort-opt">
-                        <option value="duedate">Due date</option>
+                        <option value="dueDate">Due date</option>
                         <option value="title">Title</option>
                         <option value="duration">Duration</option>
                     </select>
@@ -202,8 +223,10 @@
             <p id="empty-state" class="empty-state" hidden>No tasks match your search</p>
         </section>
         
-        <section class="page center-page" id="about-page" aria-labelledby="About title">
-            <div class="section-header">
+                                        <!-- about feature -->
+
+        <section class="page center-page" id="about-page" aria-labelledby="about-title" hidden>
+            <div class="page-header">
                 <h1 id="about-title">About </h1>
             </div>
 
@@ -254,8 +277,81 @@
                 </div>
             </article>
         </section>
+                                        <!-- setting feature -->
+    
+        <section id="settings-page" class="page narrow-page" aria-labelledby="settings-title" hidden>
+            <div class="page-header">
+                <p class="eyebrow">Preferences</p>
+                <h1 id="settings-title">Settings</h1>
+            </div>
 
+            <div class="card settings-panel">
+               
+                <section class="settings-card planner-card" aria-labelledby="planner-settings-title">
+                    <div class="setting-heading">
+                        <span class="setting-icon" aria-hidden="true"><img src="icons/sliders.svg" alt=""></span>
+                        <div>
+                            <h2 id="planner-settings-title">Planner</h2>
+                            <p>Make your plans ahead</p>
+                        </div>
+                    </div>
+                    <fieldset>
+                        <legend>Duration unit</legend>
+                        <label><input type="radio" name="unit" value="minutes"> Minutes</label>
+                        <label><input type="radio" name="unit" value="hours"> Hours</label>
+                    </fieldset>
+                    <p class="setting-note">Durations over 60 minutes are shown in hours.</p>
 
+                    <div class="field">
+                        <label for="weekly-cap">Weekly target in hours</label>
+                        <input id="weekly-cap" type="number" min="1" max="168">
+                    </div>
+                    <button id="save-settings" class="button primary" type="button">Save settings</button>
+                </section>
+
+                <section class="settings-card appearance-card" aria-labelledby="appearance-title">
+                    <div class="setting-heading">
+                        <span class="setting-icon" aria-hidden="true"><img src="icons/moon.svg" alt=""></span>
+                        <div>
+                            <h2 id="appearance-title">Appearance</h2>
+                            <p>Use the theme that feels good.</p>
+                        </div>
+                    </div>
+                    <div class="appearance-row">
+                        <div>
+                            <strong>Colour theme</strong>
+                            <p>Choose your suitable theme.</p>
+                        </div>
+                        <button class="small-toggle" type="button" data-theme-toggle aria-pressed="false">
+                            <span>Dark mode</span>
+                            <span class="toggle-track" aria-hidden="true"><span class="toggle-knob"></span></span>
+                        </button>
+                    </div>
+                </section>
+
+                <section class="settings-card data-card" aria-labelledby="data-title">
+                    <div class="setting-heading">
+                        <span class="setting-icon" aria-hidden="true"><img src="icons/data.svg" alt=""></span>
+                        <div>
+                            <h2 id="data-title">Data</h2>
+                            <p>Your tasks are saved locally.</p>
+                        </div>
+                    </div>
+                    <div class="button-row">
+                        <button id="export-json" class="button secondary" type="button">Export JSON</button>
+                        <label class="button secondary file-button">Import JSON
+                            <input id="import-json" type="file" accept="application/json">
+                        </label>
+                        <button id="reset-data" class="button danger" type="button">Reset sample data</button>
+                    </div>
+                </section>
+            </div>
+        </section>
     </main>
+
+    <footer>
+        <p>Edu planner => student project. all rights reserved.</p>
+    </footer>
+
 </body>
 </html>
