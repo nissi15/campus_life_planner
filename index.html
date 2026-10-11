@@ -42,6 +42,100 @@
     </div>
 
     <main id="main-content" tabindex="-1">
+        <section class="page active" id="dashboard_page" aria-labelledby="dashboard-title">
+            <div class="page-header">
+                <h1 id="dashboard_title">Plan your day</h1>
+            </div>
+
+            <div class="dash-stats" aria-label="task statistics">
+                <article class="card stats-card">
+                    <span class="stats-icon" aria-hidden="true">
+                        <img src="icons/list.svg" alt="">
+                    </span>
+                    <div>
+                        <p>Total tasks</p><strong id="total-tasks">0</strong>
+                    </div>
+                </article>
+                <article class="card stats-card">
+                    <span class="stats-icon" aria-hidden="true">
+                        <img src="icons/clock.svg" alt="">
+                    </span>
+                    <div>
+                        <p>Total duration</p><strong id="total-duration">0 minutes</strong>
+                    </div>
+                </article>
+                <article class="card stats-card">
+                    <span class="stats-icon" aria-hidden="true">
+                        <img src="icons/top_task.svg" alt="">
+                    </span>
+                    <div>
+                        <p>Top task</p><strong id="top-task">Npne</strong>
+                    </div>
+                </article>
+            </div>
+
+            <article class="card card-today" aria-labelledby="today-title">
+                <div class="today-heading">
+                    <div>
+                        <h2 id="today-title">Today's plan</h2>
+                    </div>
+                    <p id="today-date" class="today-date"></p>
+                </div>
+                <div id="today-tasks" class="today-list"></div>
+            </article>
+
+            <article class="card chart-card" >
+                <div class="card-header">
+                    <div>
+                        <h2>Past 7 days</h2>
+                        <p class="screen-reader-only">Minutes planned for each day.</p>
+                    </div>
+                    <strong class="screen-reader-only" id="total-weekly">0 hours</strong>
+                </div>
+                <div class="week-chart" id="week-chart"aria-label="Past 7 day tasks chart" role="group"></div>
+                <div class="target">
+                    <p id="target_text">Weekly target => 0 of 20 hours</p>
+                    <progress class="week-progress" id="week-progress" aria-label="weekly progress target" max="100" value="0">0%</progress>
+                </div>
+            </article>
+
+            <article class="card recent-card">
+                <div class="card-header">
+                    <div>
+                        <h2>Recent tasks</h2>
+                    </div>
+                    <button class="button primary" type="button" data-open-form><span aria-hidden="true">＋</span> Add task</button>
+                </div>
+                <div class="recent-head" aria-hidden="true">
+                    <span>Title</span>
+                    <span>Tag</span>
+                    <span>Due date</span>
+                    <span>Duration</span>
+                    <span class="recent-actions-heading">Actions</span>
+                    </div>
+
+                <ul id="recent-tasks" class="simple-list">
+                    <li class="simple-task">
+                        <strong>Attend Elab sessions</strong>
+                        <span><span class="tag">Study</span></span>
+                        <time datetime="2026-10-09">Oct 9</time>
+                        <span>1.5 hours</span>
+                        <button class="action-button" type="button">Edit</button>
+                        <button class="action-button delete" type="button">Delete</button>
+                    </li>
+
+                    <li class="simple-task">
+                        <strong>Attend visitor session for robotics club</strong>
+                        <span><span class="tag">Club</span></span>
+                        <time datetime="2026-10-10">Oct 10</time>
+                        <span>2 hours</span>
+                        <button class="action-button" type="button">Edit</button>
+                        <button class="action-button delete" type="button">Delete</button>
+                    </li>
+                </ul>
+            </article>
+        </section>
+
         
     </main>
 </body>
