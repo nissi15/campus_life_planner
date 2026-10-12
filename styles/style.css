@@ -544,3 +544,91 @@ td button:last-child {
     display: none;
 }
 
+
+/* ABOUT featuree */
+
+.about-card {
+    overflow: hidden;
+}
+
+.about-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 1.4rem;
+}
+
+
+.number, .eyebrow {
+    color: var(--green);
+    margin-bottom: 0.35rem;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase
+}
+
+.C-mark {
+    background: var(--text);
+    color: #ffffff;
+    font-weight: 800;
+    display: grid;
+    flex: 0 0 auto;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 13px;
+    font-size: 1.4rem;
+}
+.about-header h2, .about-desc h2 {
+    margin-bottom: 0.35rem;
+}
+
+.about-desc {
+    flex: 1;
+    padding: 1.4rem;
+}
+
+.about-header p, .about-desc li {
+    color: var(--muted);
+}
+
+.about-details {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.about-desc:not(:first-child) {
+    border-top: 1px solid var(--border);
+}
+
+.about-desc ul {  
+    padding-left: 20px;
+    margin: 12px 0 0;
+}
+
+.about-desc li {
+    margin-bottom: 0.4rem;
+}
+
+.about-contact {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 1.4rem;
+}
+
+.about-contact h2 {
+    margin-bottom: 0.35rem;
+}
+
+.contact-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+

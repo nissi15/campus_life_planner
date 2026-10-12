@@ -1,12 +1,11 @@
-const taskFeature = document.querySelector('a[href="#task-page"]');
 const dashboard = document.getElementById('dashboard-page');
-const taskPage = document.getElementById('task-page');
+const aboutFeature = document.querySelector('a[href="#about-page"]');
+const aboutPage = document.getElementById('about-page');
 
-
-taskFeature.addEventListener('click', function (makeThis) {
-    makeThis.preventDefault();
+aboutFeature.addEventListener('click', function (visible) {
+    visible.preventDefault();
 
     dashboard.classList.remove('active');
-    taskPage.classList.add('active');
-//  
+    aboutPage.classList.add('active');
+    document.getElementById('top-name').textContent = 'About';
 });
