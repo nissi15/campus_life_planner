@@ -1,11 +1,10 @@
 const dashboard = document.getElementById('dashboard-page');
-const aboutFeature = document.querySelector('a[href="#about-page"]');
-const aboutPage = document.getElementById('about-page');
+const settingFeature = document.querySelector('a[href="#settings-page"]');
+const settingPage = document.getElementById('settings-page');
 
-aboutFeature.addEventListener('click', function (visible) {
+settingFeature.addEventListener('click', function (visible) {
     visible.preventDefault();
-
     dashboard.classList.remove('active');
-    aboutPage.classList.add('active');
-    document.getElementById('top-name').textContent = 'About';
+    settingPage.classList.add('active');
+    document.getElementById('top-name').textContent = 'Settings';
 });
