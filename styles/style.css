@@ -186,3 +186,59 @@ button, a, input, select {
     width: 18px;
     height: 18px;
 }
+
+main {
+    width: 100%;
+    padding: 1.4rem 16px 6rem;
+
+    input, select {
+        color: var(--text);
+        width: 100%;
+        min-height: 44px;
+        background-color: var(--surface);
+        padding: 0.65rem 12px;
+        border: 1px solid #aeb7c7;
+        border-radius: 8px;
+    }
+    .primary {
+        color: white;
+        background: var(--text);
+        border-color: var(--text);
+    }
+} 
+
+.page {
+    width: min(100%, 1180px);
+    margin-inline: auto;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.4rem;
+    gap: 17px;
+}
+
+.btn, .button {
+    background: var(--surface);
+    color: var(--text);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--border);
+    padding: 0.6rem 0.85rem;
+    border-radius: 9px;
+    cursor: pointer;
+    text-decoration: none;
+    min-height: 44px;
+}
+
+.card {
+    background-color: #ffffff;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+
