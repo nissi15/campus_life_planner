@@ -349,6 +349,71 @@
         </section>
     </main>
 
+    <dialog id="task-dialog" aria-labelledby="form-title">
+        <form  id="task-form" novalidate>
+            <div id="dialog-heading">
+                <div>
+                    <p class="eyebrow">Task details</p>
+                    <h2 id="form-title">Add task</h2>
+                    <p class="dialog-intro" id="form-intro">Put information for your campus task.</p>
+                </div>
+                <button id="close-dialog" class="close-btn" type="button" aria-label="Close the form"></button>
+            </div>
+
+            <input type="hidden" id="task-id">
+
+            <div id="field">
+                <label for="task-title">Title</label>
+                <p class="field-help" id="title-help">Try adding a simple title like Frontend session</p>
+                <input type="text" name="title" id="task-title" placeholder="Ex: E-lab group project" aria-describedby="title-help title-error" required>
+                <p class="error-text" id="title-error"></p>
+            </div>
+
+            <div class="form-row">
+                <div class="field">
+                    <label for="task-duration">Duration <span id="duration-label">(minutes)</span></label>
+                    <p id="duration-help" class="field-help">how much time are spending on this task.</p>
+                    <input id="task-duration" name="duration" type="text" inputmode="decimal" placeholder="e.g. 1.5" aria-describedby="duration-help duration-error" required>
+                    <p id="duration-error" class="error-text"></p>
+                </div>
+
+                <div class="field">
+                    <label for="task-date">Due date</label>
+                    <p id="date-help" class="field-help"> when the should this task be completed.</p>
+                    <input id="task-date" name="dueDate" type="date" aria-describedby="date-help dueDate-error" required>
+                    <p id="dueDate-error" class="error-text"></p>
+                </div>                
+            </div>
+
+            <div class="field">
+                <label for="task-tag">Tag</label>
+                <p id="tag-help" class="field-help">Pick one category using letters, spaces.</p>
+                <input id="task-tag" name="tag" type="text" placeholder="e.g. Study, Club, or Event" autocomplete="off" aria-describedby="tag-help tag-error" required>
+
+                <div class="tag-suggestions" aria-label="Suggested tags">
+                    <button type="button" data-tag-suggestion="Study">Study</button>
+                    <button type="button" data-tag-suggestion="Assignment">Assignment</button>
+                    <button type="button" data-tag-suggestion="Reading">Reading</button>
+                    <button type="button" data-tag-suggestion="Club">Club</button>
+                    <button type="button" data-tag-suggestion="Event">Event</button>
+                </div>
+
+                <p id="tag-error" class="error-text"></p>
+            </div>
+
+            <div class="field">
+                    <label for="task-note">Note <span class="opt-label">(optional)</span></label>
+                    <p id="note-help" class="field-help">Add a small note up to 200 characters.</p>
+                    <textarea id="task-note" name="note" maxlength="200" placeholder="e.g. Bring the lab worksheet" aria-describedby="note-help"></textarea>
+            </div>
+           
+            <div class="dialog-actions">
+                <button id="cancel-dialog" class="button secondary" type="button">Cancel</button>
+                <button id="save-task-button" class="button primary" type="submit">Save task</button>
+            </div>
+        </form>
+
+    </dialog>
     <footer>
         <p>Edu planner => student project. all rights reserved.</p>
     </footer>
