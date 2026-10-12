@@ -56,7 +56,18 @@ h1, h2, p {
     color: white;
     border-radius: 5.8px;
     padding: 0.55rem 0.8rem;
-    background: var(--text)
+    background: var(--text);
+    z-index: 100;
+    transform: translateY(-150%);
+}
+
+[hidden] {
+    display: none !important;
+}
+
+:focus-visible {
+  outline: 3px solid #2f80ed;
+  outline-offset: 3px;
 }
 
 .screen-reader-only {
@@ -64,6 +75,9 @@ h1, h2, p {
     width: 1px;
     height: 1px;
     overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    white-space: nowrap;    
 }
 
 .skip-link:focus {
@@ -95,6 +109,7 @@ h1, h2, p {
     list-style: none;
     border-top: 1px solid var(--border);
     margin: 0;
+    padding: 0.45rem;
 }
 
 .nav-links {
@@ -107,6 +122,7 @@ h1, h2, p {
     padding: 0.55rem 5.6px;
     gap: 0.4rem;
     text-decoration: none;
+    min-height: 45px;
 }
 
 .nav-links:hover, .nav-links.active {
@@ -118,3 +134,55 @@ h1, h2, p {
     width: 18px;
 }
 
+button, input, select {
+    font: inherit;
+}
+ 
+button, a, input, select {
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 64px;
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1rem;
+    background: white;
+}
+
+.top-page {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    gap: 8px;
+}
+
+.dot {
+    width: 9px;
+    height: 9px;
+    background-color: var(--green);
+    box-shadow: 0 0 0 0 4px var(--green-soft);
+    border-radius: 50%;
+}
+
+.theme {
+    display: inline-flex;
+    align-items: center;
+    min-height: 42px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 8px 12px;
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    min-height: 42px;
+}
+
+
+.theme-icon {
+    width: 18px;
+    height: 18px;
+}
