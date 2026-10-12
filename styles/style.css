@@ -21,6 +21,8 @@ html {
 }
 
 body {
+    display: flex;
+    flex-direction: column;
     margin: 0;
     background: var(--page);
     color: var(--text);
@@ -188,6 +190,7 @@ button, a, input, select {
 }
 
 main {
+    flex: 1;
     width: 100%;
     padding: 1.4rem 16px 6rem;
 
@@ -208,8 +211,9 @@ main {
 } 
 
 .page {
-    width: min(100%, 1180px);
-    margin-inline: auto;
+    width: 100%;
+    max-width: none;
+    margin: 0;
 }
 
 .page-header {
@@ -634,9 +638,18 @@ td button:last-child {
 
 /* Setting feature */
 
-#settings-title {
-    font-size: 23px;
+.section-heading {
+    margin-bottom: 22px;
 }
+
+.section-heading .eyebrow {
+    margin-bottom: 6px;
+}
+
+.section-heading h1 {
+     margin: 0;
+}
+
 
 .settings-panel {
     display: flex;
@@ -648,10 +661,10 @@ td button:last-child {
 .settings-card {
     flex: 1;
     min-width: 0;
-    padding: 1.4rem;
+    padding: 24px;
 }
 
-.ettings-card:not(:first-child) {
+.settings-card:not(:first-child) {
     border-top: 1px solid var(--border);
 }
 
@@ -659,7 +672,7 @@ td button:last-child {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 1.1rem;
+    margin-bottom: 20px;
 }
 
 .setting-heading h2, .setting-heading p {
@@ -764,21 +777,23 @@ input#weekly-cap {
     gap: 13px;
 }
 
+.file-button  {
+    font-weight: 400;
+}
+
 .file-button input {
     display: none;
 }
 
 
-
-
         /* FOOTER  */
 footer {
     display: none;
-    background: var(--surface);
+    background: transparent;
     color: var(--muted);
-    border-top: 1px solid var(--border);
+    border-top: 0;
     padding: 1.4rem 1rem 6rem;
-    text-align: center;;
+    text-align: center;
 }
 
 footer p {
@@ -807,7 +822,7 @@ footer p {
     }
 
     .simple-task strong {
-        grid-column: 1 / -1;
+        grid-column: auto;
     }
 
     .toolbar {
@@ -856,14 +871,17 @@ footer p {
         bottom: 0;
         left: 0;
         z-index: 40;
-        width: 260px;
+        width: 240px;
         border-right: 1px solid var(--border);
         border-bottom: 0;
   }
 
   .brand {
-        min-height: 136px;
-        padding: 16px;
+        display: flex;
+        align-items: center;
+        padding: 0 29px;
+        height: 78px;
+        min-height: 0;
   }
 
   .all-navs {
@@ -885,23 +903,25 @@ footer p {
   }
 
   .top-bar {
-        margin-left: 260px;
+        margin-left: 240px;
         min-height: 72px;
         padding-inline: 48px;
   }
 
   main {
+        width: auto;
         padding: 2rem 3rem 4rem;
-        margin-left: 260px;
+        margin-left: 240px;
   }
 
   footer {
-        padding: 1.4rem 48px;
-        margin-left: 260px;
+    display: block;
+    padding: 1.4rem 48px;
+    margin-left: 240px;
   }
 
   .card-today, .chart-card, .recent-card {
-        padding: 1.4rem;
+     padding: 1.4rem;
   }
 }
 

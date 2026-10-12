@@ -1,10 +1,31 @@
-const dashboard = document.getElementById('dashboard-page');
-const settingFeature = document.querySelector('a[href="#settings-page"]');
-const settingPage = document.getElementById('settings-page');
+const navLinks = document.querySelectorAll(".nav-links");
+const pages = document.querySelectorAll(".page");
+const topName = document.getElementById("top-name");
 
-settingFeature.addEventListener('click', function (visible) {
-    visible.preventDefault();
-    dashboard.classList.remove('active');
-    settingPage.classList.add('active');
-    document.getElementById('top-name').textContent = 'Settings';
-});
+
+function changePage(event) {
+    event.preventDefault();
+
+    const clickedLink = event.currentTarget;
+    const pageId = clickedLink.getAttribute("href");
+    const selectedPage = document.querySelector(pageId);
+
+    for (let i = 0; i < pages.length; i++) {
+        pages[i].classList.remove("active");
+    }
+  
+    for (let i = 0; i < navLinks.length; i++) {
+        navLinks[i].classList.remove("active");
+    }
+
+    selectedPage.classList.add("active");
+    clickedLink.classList.add("active");
+    topName.textContent = clickedLink.textContent.trim();
+
+    window.location.hash = pageId;
+}
+
+
+for (let i = 0; i < navLinks.length; i++) {
+  navLinks[i].addEventListener("click", changePage);
+}
