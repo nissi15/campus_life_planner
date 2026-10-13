@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CocoPlan Tests</title>
+    <link rel="stylesheet" href="styles/main.css" />
+  </head>
+  <body>
+    <main class="narrow-page">
+      <div class="page-heading">
+        <div>
+          <h1>Validation tests</h1>
+          <p>Small browser assertions for the form and regex search.</p>
+        </div>
+        <a class="button secondary" href="index.html">Back to planner</a>
+      </div>
+      <div class="card text-card">
+        <p><strong id="test-summary">Running tests...</strong></p>
+        <ol id="test-results"></ol>
+      </div>
+    </main>
+
+    <script type="module">
+      import {
+        removingSpace,
+        validatingTitle,
+        validatingDuration,
+        validatingDate,
+        validatingTag,
+        validatingTask,
+      } from "./scripts/validators.js";
+
+     
+      const tests = [
+        [
+          "Removes extra spaces",
+          removingSpace("  Review   notes  ") === "Review notes",
+        ],
+        ["Rejects an empty title", validatingTitle("") !== ""],
+        [
+          "Accepts a normal title",
+          validatingTitle("Review chemistry notes") === "",
+        ],
+        [
+          "Rejects repeated words",
+          validatingTitle("Review review notes") !== "",
+        ],
+        ["Accepts a decimal duration", validatingDuration("1.5") === ""],
+        ["Rejects a zero duration", validatingDuration("0") !== ""],
+        ["Accepts a real date", validatingDate("2024-02-29") === ""],
+        ["Rejects an impossible date", validatingDate("2026-02-30") !== ""],
+        ["Accepts a hyphenated tag", validatingTag("Self-Care") === ""],
+        ["Rejects numbers in a tag", validatingTag("Study101") !== ""],
+        [
+          "Collects errors from several fields",
+          Object.keys(
+            validatingTask({
+              title: "",
+              duration: "0",
+              dueDate: "2026-02-30",
+              tag: "Study101",
+            }),
+          ).length === 4,
+        ],
+      ];
+
+      const list = document.getElementById("test-results");
+      let passed = 0;
+
+      
+      tests.forEach(function (test) {
+        const item = document.createElement("li");
+        item.textContent = `${test[1] ? "PASS" : "FAIL"} — ${test[0]}`;
+        item.style.color = test[1] ? "#267a3f" : "#b42318";
+        list.appendChild(item);
+        if (test[1]) passed += 1;
+      });
+
+      document.getElementById("test-summary").textContent =
+        `${passed} of ${tests.length} tests passed.`;
+    </script>
+  </body>
+</html>

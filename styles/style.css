@@ -928,7 +928,7 @@ footer p {
 /* Task dialog */
 
 dialog {
-    background: var(--shadow);
+    background: var(--surface);
     color: var(--text);
     width: 90%;
     padding: 24px;
