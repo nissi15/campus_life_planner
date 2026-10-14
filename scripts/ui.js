@@ -12,13 +12,13 @@ const sortDirection = document.getElementById('sort-direction')
 
 const totalTasks =  document.getElementById('total-tasks');
 const totalDuration =  document.getElementById('total-duration');
-const topTag = document.getElementById('top-tag');
+const topTag = document.getElementById('top-task');
 const todayDate = document.getElementById('today-date');
 const todayTasks = document.getElementById('today-tasks');
-const weeklyTotal = document.getElementById('weekly-total');
-const weeklyChart = document.getElementById('weekly-chart');
-const targetText = document.getElementById('target-text');
-const weeklyProgress = document.getElementById('weekly progress');
+const weeklyTotal = document.getElementById('total-weekly');
+const weeklyChart = document.getElementById('week-chart');
+const targetText = document.getElementById('target_text');
+const weeklyProgress = document.getElementById('week progress');
 const recentTasks = document.getElementById('recent-tasks');
 
 export function formatDuration(duration) {
@@ -165,6 +165,7 @@ export  function closeTaskDetails() {
 export function renderEverything() {
     renderTasks();
     updateSortDirectionlabel();
+    renderDashboard();
 }
 
 function makeDateText(date) {
@@ -249,7 +250,7 @@ export function renderTodayTasks() {
     todayTasks.innerHTML = tasksDueToday.map(function (task) {
         const completedClass = task.completed ? ' completed' : '';
         const checked = task.completed ? ' checked' : '';
-        const checkLabel = task.completed ? 'Mark ' + task.title + ' not completed' : 'Mark' + task.title +' completed';
+        const checkLabel = task.completed ? 'Mark ' + task.title + ' not completed' : 'Mark ' + task.title +' completed';
 
         return '<article class="today-task' + completedClass + '">' +
             '<div class= "today-task-row">' +
@@ -257,7 +258,7 @@ export function renderTodayTasks() {
             '<span class="screen-reader-only">' +tweakSpecialHtml(checkLabel) + '</span>' +
             '<input type="checkbox" data-action="toggle-completed" data-id="' + tweakSpecialHtml(task.id) + '"' + checked + '>' +
             '</label>' +
-            '<strong class= "today-task-title'> + tweakSpecialHtml(task.title) + '</strong>' +
+            '<strong class= "today-task-title">' + tweakSpecialHtml(task.title) + '</strong>' +
             '<div class="today-task-meta">' +
             '<span class="tag">' + tweakSpecialHtml(task.tag) + '</span>' +
             '<span>' + tweakSpecialHtml(formatDuration(task.duration)) + '</span>' +
@@ -345,7 +346,7 @@ export function renderWeeklyChart() {
 
 
 // Update progress bar i'm using 20 hours as target for now
-export function updateWeeklyTartget(totalMinutes) {
+export function updateWeeklyTarget(totalMinutes) {
     
     const targetHours = 20
     const targetMinutes = targetHours * 60;
@@ -385,7 +386,7 @@ export function renderRecentTasks() {
             '<time datetime="' + tweakSpecialHtml(task.dueDate) + '">' + tweakSpecialHtml(formatDate(task.dueDate)) + '</time>' +
             '<span>' + tweakSpecialHtml(formatDuration(task.duration)) + '</span>' +
             '<button class="action-button" type="button" data-action="edit" data-id="' + tweakSpecialHtml(task.id) + '">Edit</button>' +
-            '<button class="action-button" delete" type="button" data-action="delete" data-id="' + tweakSpecialHtml(task.id) + '">Delete</button>' +
+            '<button class="action-button delete" type="button" data-action="delete" data-id="' + tweakSpecialHtml(task.id) + '">Delete</button>' +
             '</li>'
     }).join('');
 }
@@ -396,7 +397,7 @@ export function renderDashboard() {
     renderStatistics();
     renderTodayTasks();
     const totalMin = renderWeeklyChart();
-    updateWeeklyTartget(totalMin);
+    updateWeeklyTarget(totalMin);
     renderRecentTasks();
 
 }
