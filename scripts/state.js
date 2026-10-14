@@ -8,7 +8,7 @@ const sampleTasks = [
         completed: false,
         note: 'We are scraping rotten tomatoes',
         createdAt: '2026-10-01T09:00:00.000Z',
-        updatedAT: '2026-10-01T09:00:00.000Z'
+        updatedAt: '2026-10-01T09:00:00.000Z'
     },
     {
         id: 'task-2',
@@ -76,9 +76,11 @@ export function setSearchText(searchText) {
     state.searchText = searchText;
 }
 
+
 export function setSortField(sortField) {
     state.sortField = sortField;
 }
+
 
 export function reverseSortDirection() {
     if (state.sortDirection === 'ascending') {
@@ -87,4 +89,26 @@ export function reverseSortDirection() {
     }else {
         state.sortDirection = 'ascending';
     }
+}
+
+
+
+export function toggleTaskCompleted(taskId) {
+    const task = findTask(taskId);
+
+    if (!task) return;
+
+    task.completed = !task.completed;
+    task.updatedAt = new Date().toISOString();
+}
+
+
+// keeps notes written from todays plan
+export function updateTaskNote(taskId, note) {
+    const task = findTask(taskId);
+
+    if (!task) return;
+
+    task.note = note.trim();
+    task.updatedAt = new Date().toISOString();
 }
