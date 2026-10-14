@@ -1,10 +1,16 @@
 import { removingSpace, validatingTask } from "./validators.js";
 
+import { addTask, findTask, removeTask, reverseSortDirection, setSearchText, setSortField, updateTask } from "./state.js";
+
+import { closeTaskDetails, openTaskDetails, renderEverything } from "./ui.js";
+
 const pages = document.querySelectorAll('.page')
 const navlinks =  document.querySelectorAll('.nav-links')
-const currentPgTitle = document.getElementById('top-page-name')
+const currentPgTitle = document.getElementById('top-name')
 
 
+
+let viewedTaskId = "";
 
 function getUrlPage() {
     let pgUrl = window.location.hash.replace('#', '').replace('-page', '');
@@ -34,7 +40,7 @@ function showActivePage(pageName) {
     for (let i = 0; i < navlinks.length; i += 1) {
         let currentLink = navlinks[i];
         let linkPageName = currentLink.getAttribute('href').replace('#', '');
-        let isActiveLink = linkPageName === pageName;
+        let isActiveLink = linkPageName === pageName + '-page';
 
         currentLink.classList.toggle('active', isActiveLink);
 
@@ -70,6 +76,7 @@ const tagBtns = document.querySelectorAll('[data-tag-suggestion]');
 // it hides old data or red error from previous tasks creation attempts
 function clearTaskForm() {
     taskForm.reset();
+    document.getElementById('task-id').value = '';
 
     const fieldNames = ['title', 'duration', 'dueDate', 'tag'];
 
@@ -95,6 +102,26 @@ function openTaskForm() {
 }
 
 
+function openEditForm(taskId) {
+    const task = findTask(taskId);
+
+    if(!task) return;
+
+    clearTaskForm();
+    document.getElementById('task-id').value =task.id;
+    document.getElementById("task-title").value = task.title;
+    document.getElementById('task-duration').value = task.duration;
+    document.getElementById('task-date').value = task.dueDate
+    document.getElementById("task-tag").value = task.tag;
+    document.getElementById("task-note").value = task.note;
+    document.getElementById("form-title").textContent = "Edit task";
+    document.getElementById('form-intro').textContent = 'Update the task information below';
+    document.getElementById('save-task-button').textContent = 'Save changes';
+    taskDialog.showModal();
+    document.getElementById('task-title').focus();
+}
+
+
 // closes the form when we hit x or cancel
 function closeTaskForm() {
     taskDialog.close();
@@ -103,6 +130,7 @@ function closeTaskForm() {
 //reading the values being filled in form
 function readAddedTask() {
     return {
+        id: document.getElementById('task-id').value,
         title: removingSpace(document.getElementById('task-title').value),
         duration:  document.getElementById('task-duration').value.trim(),
         dueDate: document.getElementById('task-date').value,
@@ -159,10 +187,42 @@ function submitTask(sub) {
         focusInvalidError(errors)
         return;
     }
+    const currentTime = new Date().toISOString()
 
-    document.getElementById('polite-message').textContent = 'All task details in this form are okay';
-    document.getElementById('form-intro').textContent = '';
+    if (task.id === '') {
+        addTask({
+            id: 'task-' + Date.now(),
+            title: task.title,
+            duration: Number(task.duration),
+            dueDate: task.dueDate,
+            tag: task.tag,
+            completed: false,
+            note: task.note,
+            createdAT: currentTime,
+            updatedAt: currentTime
+        });
+        document.getElementById('polite-message').textContent = 'Task added.';
+    } else {
+        const oldTask = findTask(task.id);
+
+        updateTask(task.id, {
+            id: oldTask.id,
+            title: task.title,
+            duration: Number(task.duration),
+            dueDate: task.dueDate,
+            tag: task.tag,
+            note: task.note,
+            completed: oldTask.completed,
+            createdAt: oldTask.createdAt,
+            updatedAt: currentTime
+        });
+        document.getElementById('form-intro').textContent = '';
+    }
+    closeTaskForm();
+    renderEverything();
 }
+
+
 
 // puts the a suggested tag into the tag input
 function chooseSuggestedTag(event) {
@@ -173,6 +233,59 @@ function chooseSuggestedTag(event) {
   tagInput.value = suggestTag;
   tagInput.focus();
 }
+
+
+function searchTasks(event) {
+    setSearchText(event.target.value);
+    renderEverything();
+}
+
+
+
+function changeSortField(event) {
+    setSortField(event.target.value);
+    renderEverything();
+}
+
+
+function changeSortDirection() {
+    reverseSortDirection();
+    renderEverything();
+
+}
+
+function HandleTaskAction(event) {
+    const actionBtn = event.target.closest('[data-action]');
+
+    if (!actionBtn) return;
+
+    const taskId = actionBtn.getAttribute('data-id');
+    const action = actionBtn.getAttribute('data-action');
+
+    if (action === 'details') {
+        const task = findTask(taskId);
+        viewedTaskId = taskId;
+        openTaskDetails(task);
+    } else if (action === 'edit') {
+        openEditForm(taskId);
+    } else if (action === 'delete') {
+        const shouldDelete = window.confirm('Delete this task');
+        
+        if (shouldDelete) {
+            removeTask(taskId);
+            renderEverything();
+            document.getElementById('polite-message').textContent = 'Task deleted.';
+        }
+    }
+}
+
+
+function editTaskFromDetals() {
+    closeTaskDetails();
+    openEditForm(viewedTaskId);
+}
+
+
 
 window.addEventListener('hashchange', function (){
     showActivePage(getUrlPage());
@@ -191,4 +304,26 @@ for (let i=0; i < tagBtns.length; i += 1 ) {
     tagBtns[i].addEventListener('click', chooseSuggestedTag);
 }
 
+
+const searchInput = document.getElementById('search-input');
+const sortSelect = document.getElementById('sort-opt');
+const sortDirectionBtn = document.getElementById('sort-direction');
+const taskTableBody = document.getElementById('task-table-body');
+const taskCards = document.getElementById('task-cards');
+const closeDetailsBtn = document.getElementById('close-details');
+const closeDetailsBottomBtn = document.getElementById('close-details-bottom');
+const editFromDetailsBtn = document.getElementById('edit-from-details');
+
+
+searchInput.addEventListener('input', searchTasks);
+sortSelect.addEventListener('change', changeSortField);
+sortDirectionBtn.addEventListener('click', changeSortDirection);
+taskTableBody.addEventListener('click', HandleTaskAction);
+taskCards.addEventListener('click', HandleTaskAction)
+closeDetailsBtn.addEventListener('click', closeTaskDetails);
+closeDetailsBottomBtn.addEventListener('click', closeTaskDetails);
+editFromDetailsBtn.addEventListener('click', editTaskFromDetals);
+
 showActivePage(getUrlPage());
+renderEverything();
+
