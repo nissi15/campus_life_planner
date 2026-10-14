@@ -10,6 +10,17 @@ const taskDetailsdialog = document.getElementById('task-details-dialog');
 const sortDirection = document.getElementById('sort-direction')
 
 
+const totalTasks =  document.getElementById('total-tasks');
+const totalDuration =  document.getElementById('total-duration');
+const topTag = document.getElementById('top-tag');
+const todayDate = document.getElementById('today-date');
+const todayTasks = document.getElementById('today-tasks');
+const weeklyTotal = document.getElementById('weekly-total');
+const weeklyChart = document.getElementById('weekly-chart');
+const targetText = document.getElementById('target-text');
+const weeklyProgress = document.getElementById('weekly progress');
+const recentTasks = document.getElementById('recent-tasks');
+
 export function formatDuration(duration) {
     const minutes = Number(duration)
 
@@ -154,4 +165,238 @@ export  function closeTaskDetails() {
 export function renderEverything() {
     renderTasks();
     updateSortDirectionlabel();
+}
+
+function makeDateText(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    return year + '-' + month + '-' + day;
+}
+
+function formatHours(min) {
+    const hours = Math.round((min / 60) * 100) / 100;
+    
+    return hours + (hours === 1 ? ' hour' : ' hours');
+}
+
+
+// find tags used by the most tasks
+
+export function findTopTag(tasks) {
+    const tagCounts = {};
+    let mostUsedTag = 'None';
+    let highestCount  = 0;
+
+    for (let i=0; i < tasks.length; i+=1) {
+        const tag = tasks[i].tag;
+        const tagKey = tag.toLowerCase();
+
+        if(!tagCounts[tagKey]) {
+            tagCounts[tagKey] = {
+                name: tag,
+                count: 0
+            };
+        }
+
+        tagCounts[tagKey].count += 1;
+
+        if (tagCounts[tagKey].count > highestCount) {
+            mostUsedTag = tagCounts[tagKey].name;
+            highestCount = tagCounts[tagKey].count;
+        }
+    }
+
+    return mostUsedTag;
+}
+
+// displays statistic cards 
+
+export function renderStatistics() {
+    let durationInMinutes = 0;
+
+    for (let i = 0; i < state.tasks.length; i += 1) {
+        durationInMinutes += Number(state.tasks[i].duration);
+    }
+
+    totalTasks.textContent = state.tasks.length;
+    totalDuration.textContent = formatDuration(durationInMinutes);
+    topTag.textContent = findTopTag(state.tasks);
+}
+
+// shows tags that are due today
+
+export function renderTodayTasks() {
+    const currentDate = new Date();
+    const currentDateText = makeDateText(currentDate);
+    const tasksDueToday = state.tasks.filter(function (task) {
+        return task.dueDate === currentDateText;
+    });
+
+
+    todayDate.textContent = currentDate.toLocaleDateString('en', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric'
+    });
+
+    if (tasksDueToday.length === 0) {
+        todayTasks.innerHTML = '<p class="today-empty">No tasks are due today.</p>';
+        return;
+    }
+
+    todayTasks.innerHTML = tasksDueToday.map(function (task) {
+        const completedClass = task.completed ? ' completed' : '';
+        const checked = task.completed ? ' checked' : '';
+        const checkLabel = task.completed ? 'Mark ' + task.title + ' not completed' : 'Mark' + task.title +' completed';
+
+        return '<article class="today-task' + completedClass + '">' +
+            '<div class= "today-task-row">' +
+            '<label class="today-check">' +
+            '<span class="screen-reader-only">' +tweakSpecialHtml(checkLabel) + '</span>' +
+            '<input type="checkbox" data-action="toggle-completed" data-id="' + tweakSpecialHtml(task.id) + '"' + checked + '>' +
+            '</label>' +
+            '<strong class= "today-task-title'> + tweakSpecialHtml(task.title) + '</strong>' +
+            '<div class="today-task-meta">' +
+            '<span class="tag">' + tweakSpecialHtml(task.tag) + '</span>' +
+            '<span>' + tweakSpecialHtml(formatDuration(task.duration)) + '</span>' +
+            '<button class="action-button" type="button" data-action="edit" data-id="' + tweakSpecialHtml(task.id) + '">Edit</button>' +
+            '</div></div>' +
+            '<details class="today-note">' +
+            '<summary>View or edit note</summary>' +
+            '<div class="today-note-editor">' +
+            '<label class="screen-reader-only" for="today-note-' + tweakSpecialHtml(task.id) + '">Note for ' + tweakSpecialHtml(task.title) + '</label>' + 
+            '<textarea id="today-note-' + tweakSpecialHtml(task.id) + '" maxlength="200">' + tweakSpecialHtml(task.note) + '</textarea>' +
+            '<button class="button secondary" type="button" data-action="save-note" data-id="' + tweakSpecialHtml(task.id) + '">Save note</button>' +
+            '</div></details></article>';
+
+    }).join('');
+}
+
+
+// create 7 days 
+
+function  getLastSevenDays() {
+    const days = [];
+    const currentDate = new Date();
+
+
+    for (let i = 6; i >= 0; i-= 1) {
+        const date = new Date(currentDate);
+        date.setDate(currentDate.getDate() - i);
+        days.push(date);
+    }
+    return days;
+}
+
+// caluclates the duration of tasks for any day
+function getMinutesForDate(dateText) {
+    let min = 0;
+
+    for (let i = 0; i < state.tasks.length; i += 1) {
+        if (state.tasks[i].dueDate === dateText) {
+            min += Number(state.tasks[i].duration);
+        }
+    }
+
+    return min;
+}
+
+export function renderWeeklyChart() {
+    const days = getLastSevenDays();
+    const todayText = makeDateText(new Date());
+    const dayTotals = [];
+
+    let highestMinutes = 0;
+    let totalMinutes = 0;
+
+    for (let i = 0; i < days.length; i += 1) {
+        const dateText = makeDateText(days[i]);
+        const minutes = getMinutesForDate(dateText);
+        dayTotals.push(minutes);
+        totalMinutes += minutes;
+
+        if (minutes > highestMinutes) {
+            highestMinutes = minutes;
+        }
+    }
+
+    weeklyChart.innerHTML = days.map(function (date, index) {
+        const dateText = makeDateText(date);
+        const minutes = dayTotals[index];
+        const barHeight = highestMinutes === 0 ? 4 : Math.max(4, Math.round((minutes / highestMinutes) * 100));
+        const todayClass = dateText === todayText ? ' today' : '';
+        const dayName = date.toLocaleDateString('en', { weekday: 'short' });
+        const hoursLabel = formatHours(minutes);
+
+        return '<div class="bar-item' + todayClass + '" tabindex="0" aria-label="' +
+            tweakSpecialHtml(dayName + ', ' + hoursLabel) + '" style="--bar-height: ' + barHeight + '%">' +
+            '<div class="bar-shell">' +
+            '<span class="bar-value">' + tweakSpecialHtml(hoursLabel) + '</span>' +
+            '<span class="bar" style="height: ' + barHeight + '%"></span>' +
+            '</div><span>' + tweakSpecialHtml(dayName) + '</span></div>';
+
+    }).join('');
+
+    weeklyTotal.textContent = formatHours(totalMinutes);
+    return totalMinutes;
+}
+
+
+// Update progress bar i'm using 20 hours as target for now
+export function updateWeeklyTartget(totalMinutes) {
+    
+    const targetHours = 20
+    const targetMinutes = targetHours * 60;
+    const completedHours = Math.round((totalMinutes / 60) * 100) / 100;
+    const progressValue = Math.min(100, Math.round((totalMinutes / targetMinutes) * 100));
+
+
+    weeklyProgress.value = progressValue;
+    weeklyProgress.textContent = progressValue + '%';
+
+    if (totalMinutes <= targetMinutes) {
+        const remainingHours = Math.round(((targetMinutes - totalMinutes) / 60) * 100) / 100;
+        targetText.textContent = 'Weekly target: ' + completedHours + ' of ' + targetHours + 
+            ' hours - ' + remainingHours + ' hours remaining.';
+    } else {
+        const exceededHours = Math.round(((totalMinutes - targetMinutes) / 60) * 100) /100;
+        targetText.textContent = 'Weekly target: ' + completedHours + ' of ' + targetHours + ' hours - target exceeded by' + exceededHours + ' hours.';
+    }
+}
+
+
+// showing 5 recent tasks
+export function renderRecentTasks() {
+    const recent = state.tasks.slice().sort(function (firstTask, secondTask) {
+        return secondTask.updatedAt.localeCompare(firstTask.updatedAt)
+    }).slice(0, 5);
+    
+    if (recent.length === 0) {
+        recentTasks.innerHTML = '<li class="today-empty">No tasks have been added.</li>';
+        return;
+    }
+
+    recentTasks.innerHTML = recent.map(function (task) {
+        return '<li class="simple-task">' +
+            makeTitleButton(task, null) +
+            '<span><span class="tag">' + tweakSpecialHtml(task.tag) + '</span></span>' +
+            '<time datetime="' + tweakSpecialHtml(task.dueDate) + '">' + tweakSpecialHtml(formatDate(task.dueDate)) + '</time>' +
+            '<span>' + tweakSpecialHtml(formatDuration(task.duration)) + '</span>' +
+            '<button class="action-button" type="button" data-action="edit" data-id="' + tweakSpecialHtml(task.id) + '">Edit</button>' +
+            '<button class="action-button" delete" type="button" data-action="delete" data-id="' + tweakSpecialHtml(task.id) + '">Delete</button>' +
+            '</li>'
+    }).join('');
+}
+
+
+// all dashboard functions called here 
+export function renderDashboard() {
+    renderStatistics();
+    renderTodayTasks();
+    const totalMin = renderWeeklyChart();
+    updateWeeklyTartget(totalMin);
+    renderRecentTasks();
+
 }
