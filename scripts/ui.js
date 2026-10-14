@@ -18,7 +18,7 @@ const todayTasks = document.getElementById('today-tasks');
 const weeklyTotal = document.getElementById('total-weekly');
 const weeklyChart = document.getElementById('week-chart');
 const targetText = document.getElementById('target_text');
-const weeklyProgress = document.getElementById('week progress');
+const weeklyProgress = document.getElementById('week-progress');
 const recentTasks = document.getElementById('recent-tasks');
 
 export function formatDuration(duration) {
