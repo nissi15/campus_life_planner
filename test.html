@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CocoPlan Tests</title>
-    <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="styles/style.css" />
   </head>
   <body>
     <main class="narrow-page">
@@ -31,7 +31,7 @@
         validatingTask,
       } from "./scripts/validators.js";
 
-      import { higlightText, makeSearchRegex, taskMatching, tweakSpecialHtml } from "./search.js";
+      import { higlightText, makeSearchRegex, taskMatching, tweakSpecialHtml } from "./scripts/search.js";
       
       const tests = [
         [
@@ -66,7 +66,7 @@
         ],
 
         // M4: regex tests 
-        ['compiles a valid regex', makeSearchRegex('study').errror === ''],
+        ['compiles a valid regex', makeSearchRegex('study').error === ''],
         ['Matches without case sensititvity', makeSearchRegex('study').regex.test('STUDY notes')],
         ['Rejects an invalid regex safely', makeSearchRegex('[').error !== ''],
         [
@@ -87,7 +87,7 @@
         ['Escapes unsafe HTML', tweakSpecialHtml('<script>') === '&lt;script&gt;'],
         [
           'Highlights a safe match',
-          higlightText('Review notes', makeSearchRegex('Review').regex) === '<mar>Review</mark> notes'
+          higlightText('Review notes', makeSearchRegex('Review').regex) === '<mark>Review</mark> notes'
         ]
 
       ];
