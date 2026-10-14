@@ -31,7 +31,8 @@
         validatingTask,
       } from "./scripts/validators.js";
 
-     
+      import { higlightText, makeSearchRegex, taskMatching, tweakSpecialHtml } from "./search.js";
+      
       const tests = [
         [
           "Removes extra spaces",
@@ -63,6 +64,32 @@
             }),
           ).length === 4,
         ],
+
+        // M4: regex tests 
+        ['compiles a valid regex', makeSearchRegex('study').errror === ''],
+        ['Matches without case sensititvity', makeSearchRegex('study').regex.test('STUDY notes')],
+        ['Rejects an invalid regex safely', makeSearchRegex('[').error !== ''],
+        [
+          'finds matching task text',
+          taskMatching(
+            {title: 'Review notes', tag:'study', dueDate: '2026-10-14', duration: 60, note: ''},
+            makeSearchRegex('review').regex
+          )
+        ],
+        [
+          'Excludes nonmatching task text',
+          !taskMatching(
+            {title: 'Review notes', tag: 'study', dueDate: '2026-10-14', duration: 60, note: ''},
+            makeSearchRegex('gym').regex
+          )
+        ],
+        
+        ['Escapes unsafe HTML', tweakSpecialHtml('<script>') === '&lt;script&gt;'],
+        [
+          'Highlights a safe match',
+          higlightText('Review notes', makeSearchRegex('Review').regex) === '<mar>Review</mark> notes'
+        ]
+
       ];
 
       const list = document.getElementById("test-results");
