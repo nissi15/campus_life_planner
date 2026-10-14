@@ -198,7 +198,7 @@ function submitTask(sub) {
             tag: task.tag,
             completed: false,
             note: task.note,
-            createdAT: currentTime,
+            createdAt: currentTime,
             updatedAt: currentTime
         });
         document.getElementById('polite-message').textContent = 'Task added.';

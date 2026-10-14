@@ -17,9 +17,9 @@ const sampleTasks = [
         dueDate: '2026-10-08',
         tag: 'Lecture',
         completed: false,
-        note: 'Remember to start \b',
+        note: 'Remember to start backdropping',
         createdAt: '2026-10-01T09:00:00.000Z',
-        updateAT: '2026-10-01T09:00:00.000Z'
+        updatedAt: '2026-10-01T09:00:00.000Z'
     },
     {
         id: 'task-3',
@@ -29,8 +29,8 @@ const sampleTasks = [
         tag: 'Club',
         completed: false,
         note: '',
-        createdAt: '2026-10-02T010:00:00:000Z',
-        updatdeAT: '2026-10-02T10:00:00.000Z'
+        createdAt: '2026-10-02T010:00:00.000Z',
+        updatedAt: '2026-10-02T010:00:00.000Z'
     }
 
 ]
