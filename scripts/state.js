@@ -39,7 +39,12 @@ export const state = {
     tasks: sampleTasks,
     searchText: '',
     sortField: 'dueDate',
-    sortDirection: 'ascending'
+    sortDirection: 'ascending',
+    settings: {
+        durationUnit: 'minutes',
+        weeklyTarget: 20,
+        theme: 'light'
+    }    
 };
 
 export function setTasks(tasks) {
