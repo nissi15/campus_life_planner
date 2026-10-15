@@ -1,6 +1,7 @@
 import { higlightText, makeSearchRegex, taskMatching, tweakSpecialHtml } from "./search.js";
 import { state } from "./state.js" ;
 
+// task-rendering elements 
 const taskCards =  document.getElementById('task-cards');
 const taskCount =  document.getElementById('task-nbr');
 const taskTableBody = document.getElementById('task-table-body');
@@ -10,6 +11,7 @@ const taskDetailsdialog = document.getElementById('task-details-dialog');
 const sortDirection = document.getElementById('sort-direction')
 
 
+// dashboard output elementss,
 const totalTasks =  document.getElementById('total-tasks');
 const totalDuration =  document.getElementById('total-duration');
 const topTag = document.getElementById('top-task');
@@ -20,6 +22,12 @@ const weeklyChart = document.getElementById('week-chart');
 const targetText = document.getElementById('target_text');
 const weeklyProgress = document.getElementById('week-progress');
 const recentTasks = document.getElementById('recent-tasks');
+
+// setting elements used on setting page
+const durationUnitInputs = document.querySelectorAll('input[name="unit"]');
+const weeklyCap = document.getElementById('weekly-cap');
+const themeButtons = document.querySelectorAll('[data-theme-toggle]');
+const durationLabel = document.getElementById('duration-label');
 
 export function formatDuration(duration) {
     const minutes = Number(duration)
@@ -348,7 +356,7 @@ export function renderWeeklyChart() {
 // Update progress bar i'm using 20 hours as target for now
 export function updateWeeklyTarget(totalMinutes) {
     
-    const targetHours = 20
+    const targetHours = state.settings.weeklyTarget;
     const targetMinutes = targetHours * 60;
     const completedHours = Math.round((totalMinutes / 60) * 100) / 100;
     const progressValue = Math.min(100, Math.round((totalMinutes / targetMinutes) * 100));
@@ -400,4 +408,33 @@ export function renderDashboard() {
     updateWeeklyTarget(totalMin);
     renderRecentTasks();
 
+}
+
+
+export function updateSettingForm() {
+    for (let i = 0; i < durationUnitInputs.length; i += 1) {
+        durationUnitInputs[i].checked = durationUnitInputs[i].value === state.settings.durationUnit;
+    }
+
+    weeklyCap.value = state.settings.weeklyTarget;
+    durationLabel.textContent = '(' + state.settings.durationUnit + ')';
+}
+
+
+// this applies theme to the page and updates the theme btns 
+export function applyTheme() {
+    const darkMode = state.settings.theme === 'dark';
+    const nextThemeText = darkMode ? 'Light mode' : 'Dark mode';
+
+    document.documentElement.setAttribute('data-theme', state.settings.theme);
+
+    for (let i = 0; i < themeButtons.length; i += 1) {
+        const button = themeButtons[i];
+        const text = button.querySelector('span');
+
+        button.setAttribute('aria-pressed', darkMode ? 'true' : 'false');
+        button.setAttribute('aria-label', 'chage to' + nextThemeText.toLowerCase());
+
+        if (text) textContent = nextThemeText;
+    }
 }
