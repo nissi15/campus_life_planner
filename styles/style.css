@@ -79,6 +79,20 @@ h1, h2, p {
     display: none !important;
 }
 
+#polite-message:empty, #urgent-message:empty {
+    display: none;
+}
+
+#polite-message, #urgent-message  {
+    padding: 10px 16px;
+    text-align: center;
+    background: var(--surface);
+}
+
+#urgent-message {
+    color: var(--red);
+}
+
 :focus-visible {
   outline: 3px solid #2f80ed;
   outline-offset: 3px;
