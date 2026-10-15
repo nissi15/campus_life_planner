@@ -109,6 +109,18 @@ export function validatingTask(task) {
 }
 
 
+function isValidTimestamp(value) {
+    if (typeof value !== 'string' || value === ''){
+        return false;
+    }
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) return false;
+
+    return date.toISOString() === value;
+
+}
+
 export function validatingImport(data) {
     if (!Array.isArray(data)) {
         return 'The imported JSON file must contain a list of tasks.';

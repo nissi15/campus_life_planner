@@ -1,13 +1,22 @@
-import { removingSpace, validatingTask } from "./validators.js";
+import { removingSpace, validatingImport, validatingTask } from "./validators.js";
 
-import { addTask, findTask, removeTask, reverseSortDirection, setSearchText, setSortField, toggleTaskCompleted, updateTask, updateTaskNote } from "./state.js";
+import { addTask, findTask, removeTask, reverseSortDirection, setSearchText, setSettings, setSortField, setTasks, state, toggleTaskCompleted, updateTask, updateTaskNote } from "./state.js";
 
-import { closeTaskDetails, openTaskDetails, renderEverything } from "./ui.js";
+import { applyTheme, closeTaskDetails, openTaskDetails, renderEverything } from "./ui.js";
+import { downloadJson, saveSettings, saveTasks, loadSeedTasks, loadSettings, loadTasks } from "./storage.js";
 
 const pages = document.querySelectorAll('.page')
 const navlinks =  document.querySelectorAll('.nav-links')
 const currentPgTitle = document.getElementById('top-name')
 
+// setting vars
+const durationUnitInputs = document.querySelectorAll('input[name="unit"]');
+const weeklyCap = document.getElementById('weekly-cap');
+const saveSettingsBtn = document.getElementById('save-settings');
+const exportJsonBtn = document.getElementById('export-json');
+const themeButtons = document.querySelectorAll('[data-theme-toggle]');
+const importJsonInput = document.getElementById('import-json');
+const resetDataBtn = document.getElementById('reset-data');
 
 
 let viewedTaskId = "";
@@ -189,6 +198,10 @@ function submitTask(sub) {
     }
     const currentTime = new Date().toISOString()
 
+    const durationInMinutes = state.settings.durationUnit === 'hours'
+        ? Number(task.duration) * 60
+        : Number(task.duration);
+
     if (task.id === '') {
         addTask({
             id: 'task-' + Date.now(),
@@ -218,6 +231,8 @@ function submitTask(sub) {
         });
         document.getElementById('form-intro').textContent = '';
     }
+
+    saveTasks(state.tasks)
     closeTaskForm();
     renderEverything();
 }
@@ -275,6 +290,7 @@ function HandleTaskAction(event) {
         
         if (shouldDelete) {
             removeTask(taskId);
+            saveTasks(state.tasks);
             renderEverything();
             document.getElementById('polite-message').textContent = 'Task deleted.';
         }
@@ -287,6 +303,7 @@ function editTaskFromDetals() {
     openEditForm(viewedTaskId);
 }
 
+
 // when today checkbox changes it updates a task
 function changeTodayTask(event) {
     const checkbox = event.target.closest('[data-action="toggle-completed"]');
@@ -295,11 +312,13 @@ function changeTodayTask(event) {
 
     const taskId = checkbox.getAttribute('data-id');
     toggleTaskCompleted(taskId);
+    saveTasks(state.tasks);
     renderEverything();
 
     const targetMsg = document.getElementById('target_text').textContent;
     document.getElementById('polite-message').textContent = 'Task Completion updated. ' + targetMsg;
 }
+
 
 
 // saves a note added from the today's card
@@ -328,6 +347,132 @@ function handleTodayTaskAction(event) {
     document.getElementById('polite-message').textContent = 'Task note saved. ' + targetMsg;
 }
 
+
+function savePlannerSettings() {
+    let selectedUnit = '';
+
+    for (let i = 0; i < durationUnitInputs.length; i +=1) {
+        if (durationUnitInputs[i].checked) selectedUnit = durationUnitInputs[i].value;
+    }
+
+    const targetHours = Number(weeklyCap.value)
+
+    if (selectedUnit === '' || targetHours < 1 || targetHours > 168) {
+        weeklyCap.setAttribute('aria-invalid', 'true');
+        document.getElementById('urgent-message').textContent = 'Choose a duration unit and a weekly target in hours (1-168).';
+        return;
+    }
+
+    weeklyCap.setAttribute('aria-invalid', 'false');
+    setSettings({
+        durationUnit: selectedUnit,
+        weeklyTarget: targetHours,
+        theme: state.settings.theme
+    });
+    saveSettings(state.settings);
+    renderEverything();
+    document.getElementById('polite-message').textContent = 'Planner settings saved.';
+}
+
+
+function toggleTheme() {
+    const nextTheme = state.settings.theme === 'dark' ? 'light' : 'dark';
+
+    setSettings({
+        durationUnit: state.settings.durationUnit,
+        weeklyTarget: state.settings.weeklyTarget,
+        theme: nextTheme
+    });
+    saveSettings(state.settings);
+    applyTheme();
+    document.getElementById('polite-message').textContent = nextTheme + ' theme enabled.';
+}
+    
+function exportTasks() {
+    downloadJson(state.tasks);
+    document.getElementById('polite-message').textContent = 'Tasks exported as JSON.';
+
+}
+
+
+async function importTasks(event) {
+    const selectedFile = event.target.files[0];
+
+    if (!selectedFile) return;
+
+    try {
+        const fileText = await selectedFile.text();
+        const importedTasks = JSON.parse(fileText);
+        const importError = validatingImport(importedTasks);
+
+        if (importError !== '') {
+            document.getElementById('urgent-message').textContent = importError;
+            return;
+        }
+        
+        const shouldImport = window.confirm('Replace the current tasKs with the imported tasks');
+        if (!shouldImport) return;
+
+        setTasks(importedTasks);
+        saveTasks(state.tasks);
+        renderEverything();
+        document.getElementById('polite-message').textContent = 'Tasks imported successfully.';
+    } catch (error) {
+        document.getElementById('urgent-message').textContent = 'The selected file is not a valid JSON.';
+    } finally {
+        event.target.value = '';
+    }
+} 
+
+
+async function resetSampleData() {
+    const shouldReset = window.confirm('Replace the current tasks with the sample tasks?');
+
+    if (!shouldReset) return;
+
+    try {
+        const seedTasks = await loadSeedTasks();
+        const seedError = validatingImport(seedTasks);
+
+        if (seedError !== '') throw new Error(seedError);
+
+        setTasks(seedTasks);
+        saveTasks(state.tasks);
+        renderEverything();
+        document.getElementById('polite-message').textContent = 'Sample tasks restored.';
+    } catch (error) {
+        document.getElementById('urgent-message').textContent = 'The sample tasks could not be restored.';
+    }
+}
+
+
+async function startApp() {
+    const savedSettings = loadSettings();
+    if(savedSettings !== null) setSettings(savedSettings);
+
+    const savedTasks = loadTasks();
+
+    if (savedTasks !== null && validatingImport(savedTasks) === '') {
+        setTasks(savedTasks);
+    } else {
+        try {
+            const seedTasks = await loadSeedTasks();
+
+            if (validatingImport(seedTasks) !== '') {
+                throw new Error('The sample tasks are invalid.');
+            }
+
+            setTasks(seedTasks);
+            saveTasks(state.tasks)
+        } catch (error) {
+            document.getElementById('urgent-message').textContent = 'The saved tasks couldnot be loaded.'
+        }
+    }
+
+    applyTheme();
+    showActivePage(getUrlPage());
+    renderEverything();
+}
 
 window.addEventListener('hashchange', function (){
     showActivePage(getUrlPage());
@@ -371,6 +516,16 @@ todayTasks.addEventListener('change', changeTodayTask);
 todayTasks.addEventListener('click', handleTodayTaskAction);
 recentTasks.addEventListener('click', HandleTaskAction)
 
-showActivePage(getUrlPage());
-renderEverything();
+// settings event listeners and data json 
+saveSettingsBtn.addEventListener('click', savePlannerSettings);
+
+for (let i = 0; i < themeButtons.length; i += 1) {
+    themeButtons[i].addEventListener('click', toggleTheme);
+}
+
+exportJsonBtn.addEventListener('click', exportTasks);
+importJsonInput.addEventListener('change', importTasks);
+resetDataBtn.addEventListener('click', resetSampleData);
+
+startApp();
 

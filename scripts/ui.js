@@ -171,6 +171,7 @@ export  function closeTaskDetails() {
 }
 
 export function renderEverything() {
+    updateSettingForm()
     renderTasks();
     updateSortDirectionlabel();
     renderDashboard();
@@ -435,6 +436,6 @@ export function applyTheme() {
         button.setAttribute('aria-pressed', darkMode ? 'true' : 'false');
         button.setAttribute('aria-label', 'chage to' + nextThemeText.toLowerCase());
 
-        if (text) textContent = nextThemeText;
+        if (text) text.textContent = nextThemeText;
     }
 }

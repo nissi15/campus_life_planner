@@ -96,6 +96,23 @@ export function reverseSortDirection() {
     }
 }
 
+export function setSettings(settings) {
+    if (!settings || typeof settings !== 'object') return;
+
+    if (settings.durationUnit === 'minutes' || settings.durationUnit === 'hours') {
+        state.settings.durationUnit = settings.durationUnit;
+    }
+
+    const weeklyTarget = Number(settings.weeklyTarget);
+    if (weeklyTarget >= 1 && weeklyTarget <= 168) {
+        state.settings.weeklyTarget = weeklyTarget;
+    }
+
+    if (settings.theme === 'light' || settings.theme === 'dark') {
+        state.settings.theme = settings.theme;
+    }
+}
+
 
 
 export function toggleTaskCompleted(taskId) {
