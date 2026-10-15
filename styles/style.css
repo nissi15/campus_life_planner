@@ -589,7 +589,7 @@ td button {
     cursor: pointer;
 }
 
-td button:last-child {
+td .delete {
     color: var(--red);
 }
 
@@ -1258,3 +1258,65 @@ dialog::backdrop {
     margin: 0;
 }
 
+
+.bar-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    flex: 1;
+    gap: 7px;
+    height: 150px;
+}
+
+.bar-shell {
+    display: flex;
+    flex-direction: column;
+    height: 120px;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+}
+
+.bar {
+    background: #a6a6a3;
+    display: block;
+    width: 34px;
+    min-height: 4px;
+    border-radius: 4px 4px 0 0;
+}
+
+.bar-item.today .bar {
+    background: var(--text);   
+}
+
+.bar-value {
+    visibility: hidden;
+    font-size: 12px;
+}
+
+.bar-item:hover .bar-value,
+.bar-item:focus-visible .bar-value {
+    visibility: visible;
+}
+
+.today-task-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+}
+
+.today-task-title {
+    margin-right: auto;
+}
+
+.today-task-meta {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.today-note-editor textarea {
+    flex: 1;
+}
