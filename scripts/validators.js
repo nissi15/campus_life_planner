@@ -109,3 +109,77 @@ export function validatingTask(task) {
 }
 
 
+export function validatingImport(data) {
+    if (!Array.isArray(data)) {
+        return 'The imported JSON file must contain a list of tasks.';
+    }
+
+    const taskIds = [];
+
+    for (let i = 0; i < data.length; i += 1) {
+        const task = data[i];
+        const taskNumber = i + 1;
+
+        if (!task || typeof task !== 'object' || Array.isArray(task)) {
+            return 'Task ' + taskNumber + ' must be an object.';
+        }
+
+        const requiredFields = [
+            'id',
+            'title',
+            'duration',
+            'dueDate',
+            'tag',
+            'completed',
+            'note',
+            'createdAt',
+            'updatedAt'
+        ];
+
+        for (let fieldIndx = 0; fieldIndx < requiredFields.length; fieldIndx += 1) {
+            const fieldName = requiredFields[fieldIndx];
+
+            if (!Object.prototype.hasOwnProperty.call(task, fieldName)) {
+                return 'Task ' + taskNumber + ' is missing ' + fieldName + '.';
+            }
+        }
+
+        if (typeof task.id !== 'string' || task.id.trim() === '') {
+            return 'Task ' + taskNumber + ' needs a valid ID.';
+        }
+
+        if (taskIds.includes(task.id)) {
+            return 'Every imported task must have an ID';
+        }
+
+        taskIds.push(task.id);
+
+        if (typeof task.title !== 'string' ||  typeof task.tag !== 'string' || typeof task.dueDate !== 'string') {
+            return 'Task ' + taskNumber + 'has invalid title, tag, or date text.';
+        }
+
+        if (typeof task.duration !== 'number' || !Number.isFinite(task.duration)) {
+            return 'Task ' + taskNumber + ' needs a numeric(real number) duration.';
+        }
+
+        const taskErrors = validatingTask(task);
+        if (Object.keys(taskErrors).length > 0) {
+            return 'Task ' + taskNumber + ' has invalid task information.';
+        }
+
+        if (typeof task.completed !== 'boolean') {
+            return 'Task ' + taskNumber + 'needs a true or false as a completed value.';
+        }
+
+        if (typeof task.note !== 'string' || task.note.length > 200) {
+            return 'Task ' + taskNumber + ' has an invalid note.';
+        }
+
+        if (!isValidTimestamp(task.createdAt) || !isValidTimestamp(task.updatedAt)) {
+            return 'Task ' + taskNumber + ' has an invalid timestamp.'
+        }
+    }
+
+    return '';
+}
+
