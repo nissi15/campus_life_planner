@@ -16,6 +16,18 @@
     --red: #dc2626;
 }
 
+html[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #121318;
+    --surface: #1b1d23;
+    --soft-surface: #292c33;
+    --text: #f3f4f6;
+    --muted: #a0a6b2;
+    --border: #2d3038;
+    --green-soft: #173b29;
+    --shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -88,7 +100,7 @@ h1, h2, p {
 
 .heading {
     border-bottom: 1px solid var(--border);
-    background: white;
+    background: var(--surface);
 }
 
 .brand {
@@ -107,7 +119,7 @@ h1, h2, p {
     z-index: 30;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    background: white;
+    background: var(--surface);
     list-style: none;
     border-top: 1px solid var(--border);
     margin: 0;
@@ -152,7 +164,7 @@ button, a, input, select {
     min-height: 64px;
     border-bottom: 1px solid var(--border);
     padding: 0.75rem 1rem;
-    background: white;
+    background: var(--surface);
 }
 
 .top-page {
@@ -204,7 +216,7 @@ main {
         border-radius: 8px;
     }
     .primary {
-        color: white;
+        color: var(--surface);
         background: var(--text);
         border-color: var(--text);
     }
@@ -239,7 +251,7 @@ main {
 }
 
 .card {
-    background-color: #ffffff;
+    background-color: var(--surface);
     box-shadow: var(--shadow);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -546,12 +558,12 @@ label, legend {
 
 .result-count {
     margin: 1rem 0 0.6rem;
-    color: black;
+    color: var(--text);
 }
 
 
 .task-table {
-    background: white;
+    background: var(--surface);
     overflow-x: auto;
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -1117,7 +1129,7 @@ dialog::backdrop {
 
 #task-form input:not([type="hidden"]),
 #task-form textarea {
-    background: white;
+    background: var(--surface);
     color: var(--text);
     font: inherit;
     width: 100%;

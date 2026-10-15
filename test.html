@@ -28,11 +28,33 @@
         validatingDuration,
         validatingDate,
         validatingTag,
-        validatingTask,
+        validatingImport,
+        validatingTask
       } from "./scripts/validators.js";
 
       import { higlightText, makeSearchRegex, taskMatching, tweakSpecialHtml } from "./scripts/search.js";
       
+      const validImportedTask = {
+        id: 'task-test-1',
+        title: 'Review test notes',
+        duration: 60,
+        dueDate: '2026-10-15',
+        tag: 'Study',
+        completed: false,
+        note: '',
+        createdAt: '2026-10-15T08:00:00.000Z',
+        updatedAt: '2026-10-15T08:00:00.000Z'
+      };
+
+      const taskMissingTag = Object.assign({}, validImportedTask);
+      delete taskMissingTag.tag;
+
+      const taskWithInvalidTitle = Object.assign({}, validImportedTask);
+      taskWithInvalidTitle.title = '';
+
+      const taskWithInvalidTimestamp = Object.assign({}, validImportedTask);
+      taskWithInvalidTimestamp.updatedAt = 'not-a-date';
+
       const tests = [
         [
           "Removes extra spaces",
@@ -90,6 +112,13 @@
           higlightText('Review notes', makeSearchRegex('Review').regex) === '<mark>Review</mark> notes'
         ]
 
+
+        ['Accepts a valid imported task array', validatingImport([validImportedTask]) === ''],
+        ['Rejects a non-array import', validatingImport({ tasks: [] }) !== ''],
+        ['Rejects a missing required field', validatingImport([taskMissingTag]) !== ''],
+        ['Rejects duplicate task IDs', validatingImport([validImportedTask, validImportedTask]) !== ''],
+        ['Rejects invalid task values', validatingImport([taskWithInvalidTitle]) !== ''],
+        ['Rejects invalid timestamps', validatingImport([taskWithInvalidTimestamp]) !== '']
       ];
 
       const list = document.getElementById("test-results");
