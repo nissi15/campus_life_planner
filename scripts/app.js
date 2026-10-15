@@ -119,7 +119,6 @@ function openEditForm(taskId) {
     clearTaskForm();
     document.getElementById('task-id').value =task.id;
     document.getElementById("task-title").value = task.title;
-    document.getElementById('task-duration').value = task.duration;
     document.getElementById('task-date').value = task.dueDate
     document.getElementById("task-tag").value = task.tag;
     document.getElementById("task-note").value = task.note;
@@ -128,6 +127,13 @@ function openEditForm(taskId) {
     document.getElementById('save-task-button').textContent = 'Save changes';
     taskDialog.showModal();
     document.getElementById('task-title').focus();
+
+
+    if (state.settings.durationUnit === 'hours') {
+        document.getElementById('task-duration').value = task.duration /60;
+    } else {
+        document.getElementById('task-duration').value = task.duration;
+    }
 }
 
 
@@ -206,7 +212,7 @@ function submitTask(sub) {
         addTask({
             id: 'task-' + Date.now(),
             title: task.title,
-            duration: Number(task.duration),
+            duration: durationInMinutes,
             dueDate: task.dueDate,
             tag: task.tag,
             completed: false,
@@ -221,7 +227,7 @@ function submitTask(sub) {
         updateTask(task.id, {
             id: oldTask.id,
             title: task.title,
-            duration: Number(task.duration),
+            duration: durationInMinutes,
             dueDate: task.dueDate,
             tag: task.tag,
             note: task.note,
@@ -341,6 +347,7 @@ function handleTodayTaskAction(event) {
     const noteInput = todayTask.querySelector('textarea');
 
     updateTaskNote(taskId, noteInput.value);
+    saveTasks(state.tasks);
     renderEverything();
 
     const targetMsg = document.getElementById('target_text').textContent;
