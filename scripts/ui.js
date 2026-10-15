@@ -372,7 +372,7 @@ export function updateWeeklyTarget(totalMinutes) {
             ' hours - ' + remainingHours + ' hours remaining.';
     } else {
         const exceededHours = Math.round(((totalMinutes - targetMinutes) / 60) * 100) /100;
-        targetText.textContent = 'Weekly target: ' + completedHours + ' of ' + targetHours + ' hours - target exceeded by' + exceededHours + ' hours.';
+        targetText.textContent = 'Weekly target: ' + completedHours + ' of ' + targetHours + ' hours - target exceeded by ' + exceededHours + ' hours.';
     }
 }
 
@@ -434,7 +434,7 @@ export function applyTheme() {
         const text = button.querySelector('span');
 
         button.setAttribute('aria-pressed', darkMode ? 'true' : 'false');
-        button.setAttribute('aria-label', 'chage to' + nextThemeText.toLowerCase());
+        button.setAttribute('aria-label', 'change to ' + nextThemeText.toLowerCase());
 
         if (text) text.textContent = nextThemeText;
     }

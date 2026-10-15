@@ -105,7 +105,7 @@ function openTaskForm() {
     clearTaskForm();
     document.getElementById('form-title').textContent = 'Add task';
     document.getElementById('form-intro').textContent = 'Add the essential information for your campus task.';
-    document.getElementById('save-task-button').textContent = 'Check task';
+    document.getElementById('save-task-button').textContent = 'Save task';
     taskDialog.showModal();
     document.getElementById('task-title').focus();
 }
@@ -393,6 +393,9 @@ function toggleTheme() {
     saveSettings(state.settings);
     applyTheme();
     document.getElementById('polite-message').textContent = nextTheme + ' theme enabled.';
+    setTimeout (function () {
+        document.getElementById('polite-message').textContent = '';
+    })
 }
     
 function exportTasks() {
@@ -417,7 +420,7 @@ async function importTasks(event) {
             return;
         }
         
-        const shouldImport = window.confirm('Replace the current tasKs with the imported tasks');
+        const shouldImport = window.confirm('Replace the current tasks with the imported tasks');
         if (!shouldImport) return;
 
         setTasks(importedTasks);
@@ -472,7 +475,7 @@ async function startApp() {
             setTasks(seedTasks);
             saveTasks(state.tasks)
         } catch (error) {
-            document.getElementById('urgent-message').textContent = 'The saved tasks couldnot be loaded.'
+            document.getElementById('urgent-message').textContent = 'The saved tasks could not be loaded.'
         }
     }
 
