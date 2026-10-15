@@ -1,6 +1,6 @@
 import { removingSpace, validatingTask } from "./validators.js";
 
-import { addTask, findTask, removeTask, reverseSortDirection, setSearchText, setSortField, updateTask } from "./state.js";
+import { addTask, findTask, removeTask, reverseSortDirection, setSearchText, setSortField, toggleTaskCompleted, updateTask, updateTaskNote } from "./state.js";
 
 import { closeTaskDetails, openTaskDetails, renderEverything } from "./ui.js";
 
@@ -254,6 +254,8 @@ function changeSortDirection() {
 
 }
 
+
+// it handles edit and delete, details for tables and cards
 function HandleTaskAction(event) {
     const actionBtn = event.target.closest('[data-action]');
 
@@ -285,6 +287,46 @@ function editTaskFromDetals() {
     openEditForm(viewedTaskId);
 }
 
+// when today checkbox changes it updates a task
+function changeTodayTask(event) {
+    const checkbox = event.target.closest('[data-action="toggle-completed"]');
+
+    if (!checkbox) return;
+
+    const taskId = checkbox.getAttribute('data-id');
+    toggleTaskCompleted(taskId);
+    renderEverything();
+
+    const targetMsg = document.getElementById('target_text').textContent;
+    document.getElementById('polite-message').textContent = 'Task Completion updated. ' + targetMsg;
+}
+
+
+// saves a note added from the today's card
+function handleTodayTaskAction(event) {
+    const actionBtn = event.target.closest('[data-action]');
+
+    if (!actionBtn) return;
+
+    const action = actionBtn.getAttribute('data-action');
+    const taskId = actionBtn.getAttribute('data-id');
+
+    if (action === 'edit') {
+        openEditForm(taskId);
+        return;
+    }
+
+    if(action!== 'save-note') return;
+
+    const todayTask = actionBtn.closest('.today-task');
+    const noteInput = todayTask.querySelector('textarea');
+
+    updateTaskNote(taskId, noteInput.value);
+    renderEverything();
+
+    const targetMsg = document.getElementById('target_text').textContent;
+    document.getElementById('polite-message').textContent = 'Task note saved. ' + targetMsg;
+}
 
 
 window.addEventListener('hashchange', function (){
@@ -313,6 +355,8 @@ const taskCards = document.getElementById('task-cards');
 const closeDetailsBtn = document.getElementById('close-details');
 const closeDetailsBottomBtn = document.getElementById('close-details-bottom');
 const editFromDetailsBtn = document.getElementById('edit-from-details');
+const todayTasks = document.getElementById('today-tasks');
+const recentTasks = document.getElementById('recent-tasks')
 
 
 searchInput.addEventListener('input', searchTasks);
@@ -323,6 +367,9 @@ taskCards.addEventListener('click', HandleTaskAction)
 closeDetailsBtn.addEventListener('click', closeTaskDetails);
 closeDetailsBottomBtn.addEventListener('click', closeTaskDetails);
 editFromDetailsBtn.addEventListener('click', editTaskFromDetals);
+todayTasks.addEventListener('change', changeTodayTask);
+todayTasks.addEventListener('click', handleTodayTaskAction);
+recentTasks.addEventListener('click', HandleTaskAction)
 
 showActivePage(getUrlPage());
 renderEverything();
