@@ -1,0 +1,98 @@
+[
+    {
+        "id": "task-1",
+        "title": "Read js notes",
+        "duration": 90,
+        "tag": "Study",
+        "dueDate": "2026-10-09",
+        "completed": false,
+        "note": "We learnt eventListeners",
+        "createdAt": "2026-10-01T08:00:00.000Z",
+        "updatedAt": "2026-10-01T08:00:00.000Z"
+    },
+
+    {
+        "id":"task-2",
+        "title": "Attend E-llab session",
+        "duration": 60,
+        "tag": "Lecture",
+        "dueDate":"2026-10-08",
+        "completed":false,
+        "note":"We started thinkTanks",
+        "createdAt":"2026-10-02T09:00:00.000Z",
+        "updatedAt":"2026-10-02T09:00:00.000Z" 
+    },
+
+    {
+        "id":"task-3",
+        "title":"Joing the robotics club",
+        "duration": 120,
+        "tag":"Club",
+        "dueDate":"2026-10-07",
+        "completed": true,
+        "note": "",
+        "createdAt":"2026-10-03T10:00:00.000Z",
+        "updatedAt":"2026-10-03T10:00:00.000Z"
+
+    },
+      
+    {
+        "id": "task-4",
+        "title": "Going to Campus gym",
+        "duration": 75,
+        "tag": "Wellness",
+        "dueDate":"2026-10-06",
+        "completed": true,
+        "note": "I did some Bench press",
+        "createdAt":"2026-10-04T11:00:00.000Z",
+        "updatedAt":"2026-10-04T11:00:00.000Z"
+    },
+
+    {
+        "id":"task-5",
+        "title":"Read the db for SQL",
+        "duration": 60,
+        "tag":"Study",
+        "dueDate":"2026-10-05",
+        "completed": false,
+        "note":"",
+        "createdAt":"2026-10-05T12:00:00.000Z",
+        "updatedAt":"2026-10-05T12:00:00.000Z"
+    },
+
+    {
+        "id":"task-6",
+        "title":"Go the African Tech forum",
+        "duration": 45,
+        "tag": "Event",
+        "dueDate":"2026-10-04",
+        "completed": true,
+        "note":"I used mySQL",
+        "createdAt":"2026-10-06T13:00:00.000Z",
+        "updatedAt":"2026-10-06T13:00:00.000Z"
+    },
+
+    {
+        "id":"task-7",
+        "title":"Go to the school marathon",
+        "duration": 105,
+        "tag":"Wellness",
+        "dueDate":"2026-10-11",
+        "completed":false,
+        "note": "",
+        "createdAt":"2026-10-07T14:00:00.000Z",
+        "updatedAt":"2026-10-07T14:00:00.000Z"
+    },
+
+    {
+        "id":"task-8",
+        "title":"Plan the next week study",
+        "duration": 30,
+        "tag": "Planning",
+        "dueDate":"2026-10-12",
+        "completed":true,
+        "note":"",
+        "createdAt":"2026-10-08T15:00:00.000Z",
+        "updatedAt":"2026-10-08T15:00:00.000Z"
+    }
+]
