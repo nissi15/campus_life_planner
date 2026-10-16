@@ -124,7 +124,7 @@
         "id":"task-11",
         "title": "---Nomination of the school dean",
         "duration":405,
-        "tag": "--election--",
+        "tag": "School-election",
         "dueDate":"2027-05-19",
         "completed":false,
         "note": "This is a must  attend 'coz its the dean'.",
