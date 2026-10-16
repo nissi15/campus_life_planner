@@ -4,9 +4,11 @@ Edu Planner is a web app for students. It helps students plan tasks, track study
 
 ## Links
 
-- Repository: https://github.com/nissi15/campus_life_planner/
-- GitHub Pages: 
-- Demo video: 
+## Links
+
+- **Repository:** [GitHub Repo](https://github.com/nissi15/campus_life_planner/)
+- **GitHub Pages:** [Live Demo](https://nissi15.github.io/campus_life_planner/)
+- **Demo Video:** [Watch Video](https://www.loom.com/share/b57b38bfe99b47aaa28e23d9cbe84097)
 
 ## Design
 
